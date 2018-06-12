@@ -93,6 +93,6 @@ namespace shogun
 	template <>
 	struct SGTypeTraits<SGObject>
 	{
-		static const auto ptype = PT_SGOBJECT;
+		static const auto PRIMITIVE_TYPE = PT_SGOBJECT;
 	};
 }

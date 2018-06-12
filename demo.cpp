@@ -1,21 +1,32 @@
 #include "Vector.h"
+#include "exp.h"
+#include "op.h"
 #include <shogun/base/init.h>
-// #include "op.h"
 
 using namespace shogun;
 
 int main()
 {
 	init_shogun_with_defaults();
-	sg_io->set_loglevel(MSG_GCDEBUG);
 
-	Vector a(3); // creates a vector with all zero
-	SGVector<float64_t> b_({1, 2, 3});
+	Vector a(3);
+	SGVector<float64_t> b_({4, 5, 6});
 	Vector b(b_);
+	Vector c(SGVector<float64_t>{1000, 1001, 1002});
 
 	a.display_vector("a");
 	b.display_vector("b");
-	//  auto c = plus(a, b);
+	c.display_vector("c");
+
+	// BinaryVectorExp<VectorAdd, VectorRefExp, VectorRefExp>
+	// auto ab = add(a,b);
+	auto ab = add(VectorRefExp(a), VectorRefExp(b));
+
+	// BinaryVectorExp<VectorAdd, BinaryVectorExp<VectorAdd, VectorRefExp,
+	// VectorRefExp>, VectorRefExp>
+	Vector abc = add(ab, VectorRefExp(c));
+	abc.display_vector("a+b+c");
+
 	exit_shogun();
 	return 0;
 }

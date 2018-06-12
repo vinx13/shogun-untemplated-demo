@@ -12,6 +12,8 @@
 namespace shogun
 {
 
+	class VectorRefExp;
+
 	class Vector : SGReferencedData
 	{
 	private:
@@ -20,10 +22,13 @@ namespace shogun
 		void* m_data;
 
 	public:
-		Vector(int len, EPrimitiveType ptype = PT_FLOAT64)
+		template <class T>
+		using templated_type = SGVector<T>;
+
+		explicit Vector(int len, EPrimitiveType ptype = PT_FLOAT64)
 		    : SGReferencedData(true), m_ptype(ptype), m_vlen(len)
 		{
-			SG_TYPE_SWITCH(ptype, PType, { m_data = SG_MALLOC(PType, len); })
+			SG_TYPE_SWITCH(ptype, PType, { m_data = SG_CALLOC(PType, len); })
 		}
 
 		template <typename T>
@@ -33,6 +38,12 @@ namespace shogun
 			m_data = static_cast<void*>(vector.vector);
 
 			m_ptype = SGTypeTraits<T>::PRIMITIVE_TYPE;
+		}
+
+		Vector(const Vector& orig)
+		{
+			copy_data(orig);
+			ptype();
 		}
 
 		template <typename T>
@@ -77,6 +88,8 @@ namespace shogun
 				SGVector<PType>(*this).display_vector(name, prefix);
 			});
 		}
+
+		operator VectorRefExp();
 	};
 }
 #endif // VECTOR_H_
