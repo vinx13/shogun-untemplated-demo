@@ -14,6 +14,9 @@ namespace shogun
 
 	class VectorRefExp;
 
+	template <typename E>
+	class VectorExp;
+
 	class Vector : SGReferencedData
 	{
 	private:
@@ -45,6 +48,14 @@ namespace shogun
 			copy_data(orig);
 			ptype();
 		}
+
+		/** Copy from vector expression */
+		template <typename E>
+		Vector(const VectorExp<E>& exp);
+
+		/** Assign from vector expression */
+		template <typename E>
+		Vector& operator=(const VectorExp<E>& exp);
 
 		template <typename T>
 		operator SGVector<T>() const

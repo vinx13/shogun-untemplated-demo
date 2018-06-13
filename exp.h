@@ -55,11 +55,24 @@ namespace shogun
 			return self().template eval<T>();
 		}
 
-		operator Vector()
-		{
-			return eval();
-		}
+		// operator Vector()
+		// {
+		// 	return eval();
+		// }
 	};
+
+	template <typename E>
+	Vector& Vector::operator=(const VectorExp<E>& exp)
+	{
+		*this = exp.eval();
+		return *this;
+	}
+
+	template <typename E>
+	Vector::Vector(const VectorExp<E>& exp)
+	{
+		*this = exp.eval();
+	}
 
 	class VectorRefExp : public VectorExp<VectorRefExp>
 	{
