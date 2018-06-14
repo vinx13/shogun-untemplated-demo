@@ -68,6 +68,11 @@ namespace shogun
 			return *this;
 		}
 
+		~Vector()
+		{
+			unref();
+		}
+
 		template <typename T>
 		operator SGVector<T>() const
 		{
