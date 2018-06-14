@@ -102,7 +102,8 @@ namespace shogun
 
 		virtual void free_data()
 		{
-			SG_FREE(m_data);
+			if (m_data)
+				SG_FREE(m_data);
 			m_data = 0;
 			m_vlen = 0;
 			m_ptype = PT_FLOAT64;
