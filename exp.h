@@ -140,8 +140,16 @@ namespace shogun
 		template <typename T>
 		operator T() const
 		{
-			ASSERT(self().ptype() == SGTypeTraits<T>::PRIMITIVE_TYPE);
-			return self().template eval<T>();
+			// ASSERT(self().ptype() == SGTypeTraits<T>::PRIMITIVE_TYPE);
+			// return self().template eval<T>();
+
+			// do we allow implicit conversion?
+			T result;
+			SG_TYPE_SWITCH(self().ptype(), PType, {
+				result = static_cast<T>(self().template eval<PType>());
+			});
+
+			return result;
 		}
 	};
 
@@ -165,11 +173,6 @@ namespace shogun
 			return OP::template apply<T>(lhs.eval<T>(), rhs.eval<T>());
 		}
 
-		// 		operator float64_t()
-		// 		{
-		// 			return eval<float64_t>();
-		// 		}
-		//
 	private:
 		E1 lhs;
 		E2 rhs;

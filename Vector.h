@@ -68,6 +68,19 @@ namespace shogun
 			return *this;
 		}
 
+		Vector(Vector&& orig) : SGReferencedData(orig)
+		{
+			copy_data(orig);
+		}
+
+		Vector& operator=(Vector&& vector)
+		{
+			SGReferencedData::operator=(vector);
+			copy_data(vector);
+		}
+
+		// TODO copy and assign from vector exp rvalue
+
 		~Vector()
 		{
 			unref();
