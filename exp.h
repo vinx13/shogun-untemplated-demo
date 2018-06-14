@@ -8,57 +8,41 @@
 namespace shogun
 {
 
-	template <class Derived>
+	template <class E>
 	class Exp
 	{
 	public:
-		Derived& self()
+		E& self()
 		{
-			return *static_cast<Derived*>(this);
+			return *static_cast<E*>(this);
 		}
 
-		const Derived& self() const
+		const E& self() const
 		{
-			return *static_cast<const Derived*>(this);
+			return *static_cast<const E*>(this);
 		}
 
 	private:
 	};
 
-	template <class Derived>
+	template <class E>
 	class VectorExp
 	{
 	public:
-		Derived& self()
+		E& self()
 		{
-			return *static_cast<Derived*>(this);
+			return *static_cast<E*>(this);
 		}
 
-		const Derived& self() const
+		const E& self() const
 		{
-			return *static_cast<const Derived*>(this);
+			return *static_cast<const E*>(this);
 		}
 
 		EPrimitiveType ptype() const
 		{
 			return self().ptype();
 		}
-
-		Vector eval() const
-		{
-			return self().eval();
-		}
-
-		template <typename T>
-		SGVector<T> eval() const
-		{
-			return self().template eval<T>();
-		}
-
-		// operator Vector()
-		// {
-		// 	return eval();
-		// }
 	};
 
 	template <typename E>
@@ -71,7 +55,7 @@ namespace shogun
 	template <typename E>
 	Vector::Vector(const VectorExp<E>& exp)
 	{
-		*this = exp.eval();
+		*this = exp.self().eval();
 	}
 
 	class VectorRefExp : public VectorExp<VectorRefExp>
@@ -125,9 +109,67 @@ namespace shogun
 			auto lhs_result = lhs.self().template eval<T>();
 			auto rhs_result = rhs.self().template eval<T>();
 
-			return OP::apply(lhs_result, rhs_result);
+			return OP::template apply(lhs_result, rhs_result);
 		}
 
+	private:
+		E1 lhs;
+		E2 rhs;
+	};
+
+	template <typename E>
+	class ScalarExp : public Exp<ScalarExp<E>>
+	{
+	public:
+		E& self()
+		{
+			return *static_cast<E*>(this);
+		}
+
+		const E& self() const
+		{
+			return *static_cast<const E*>(this);
+		}
+
+		// conversion to any integral type: float v = scalarExp
+
+		// FIXME: why this can't compile?
+		// template <typename T,
+		// typename=std::enable_if_t<std::is_integral<T>::value>>
+
+		template <typename T>
+		operator T() const
+		{
+			ASSERT(self().ptype() == SGTypeTraits<T>::PRIMITIVE_TYPE);
+			return self().template eval<T>();
+		}
+	};
+
+	template <typename OP, typename E1, typename E2>
+	class BinaryScalarExp : public ScalarExp<BinaryScalarExp<OP, E1, E2>>
+	{
+	public:
+		BinaryScalarExp(const E1& lhs, const E2& rhs) : lhs(lhs), rhs(rhs)
+		{
+		}
+
+		EPrimitiveType ptype() const
+		{
+			ASSERT(lhs.ptype() == rhs.ptype());
+			return lhs.ptype();
+		}
+
+		template <typename T>
+		T eval() const
+		{
+			return OP::template apply<T>(lhs.eval<T>(), rhs.eval<T>());
+		}
+
+		// 		operator float64_t()
+		// 		{
+		// 			return eval<float64_t>();
+		// 		}
+		//
 	private:
 		E1 lhs;
 		E2 rhs;

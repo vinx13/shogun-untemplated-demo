@@ -43,10 +43,9 @@ namespace shogun
 			m_ptype = SGTypeTraits<T>::PRIMITIVE_TYPE;
 		}
 
-		Vector(const Vector& orig)
+		Vector(const Vector& orig) : SGReferencedData(orig)
 		{
 			copy_data(orig);
-			ptype();
 		}
 
 		/** Copy from vector expression */
@@ -56,6 +55,18 @@ namespace shogun
 		/** Assign from vector expression */
 		template <typename E>
 		Vector& operator=(const VectorExp<E>& exp);
+
+		Vector& operator=(const Vector& other)
+		{
+			if (&other == this)
+				return *this;
+
+			unref();
+			copy_data(other);
+			copy_refcount(other);
+			ref();
+			return *this;
+		}
 
 		template <typename T>
 		operator SGVector<T>() const

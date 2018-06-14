@@ -19,4 +19,19 @@ namespace shogun
 	{
 		return BinaryVectorExp<VectorAdd, E1, E2>(e1.self(), e2.self());
 	}
+
+	struct Dot
+	{
+		template <typename T>
+		static T apply(const SGVector<T>& a, const SGVector<T>& b)
+		{
+			return linalg::dot(a, b);
+		}
+	};
+
+	template <typename E1, typename E2>
+	auto dot(const VectorExp<E1>& e1, const VectorExp<E2>& e2)
+	{
+		return BinaryScalarExp<Dot, E1, E2>(e1.self(), e2.self());
+	}
 }
