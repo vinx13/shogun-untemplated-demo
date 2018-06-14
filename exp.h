@@ -48,7 +48,7 @@ namespace shogun
 	template <typename E>
 	Vector& Vector::operator=(const VectorExp<E>& exp)
 	{
-		*this = exp.eval();
+		*this = exp.self().eval();
 		return *this;
 	}
 
@@ -88,7 +88,8 @@ namespace shogun
 	class BinaryVectorExp : public VectorExp<BinaryVectorExp<OP, E1, E2>>
 	{
 	public:
-		BinaryVectorExp(const E1& lhs, const E2& rhs) : lhs(lhs), rhs(rhs)
+		BinaryVectorExp(OP op, const E1& lhs, const E2& rhs)
+		    : lhs(lhs), rhs(rhs)
 		{
 		}
 
@@ -109,12 +110,13 @@ namespace shogun
 			auto lhs_result = lhs.self().template eval<T>();
 			auto rhs_result = rhs.self().template eval<T>();
 
-			return OP::template apply(lhs_result, rhs_result);
+			return op.template apply(lhs_result, rhs_result);
 		}
 
 	private:
 		E1 lhs;
 		E2 rhs;
+		OP op;
 	};
 
 	template <typename E>
@@ -137,6 +139,9 @@ namespace shogun
 		// template <typename T,
 		// typename=std::enable_if_t<std::is_integral<T>::value>>
 
+		// this doesn't work either
+		// template< typename T, std::enable_if_t<std::is_integral<T>::value>* =
+		// nullptr>
 		template <typename T>
 		operator T() const
 		{
@@ -157,7 +162,8 @@ namespace shogun
 	class BinaryScalarExp : public ScalarExp<BinaryScalarExp<OP, E1, E2>>
 	{
 	public:
-		BinaryScalarExp(const E1& lhs, const E2& rhs) : lhs(lhs), rhs(rhs)
+		BinaryScalarExp(OP op, const E1& lhs, const E2& rhs)
+		    : lhs(lhs), rhs(rhs)
 		{
 		}
 
@@ -170,12 +176,13 @@ namespace shogun
 		template <typename T>
 		T eval() const
 		{
-			return OP::template apply<T>(lhs.eval<T>(), rhs.eval<T>());
+			return op.template apply<T>(lhs.eval<T>(), rhs.eval<T>());
 		}
 
 	private:
 		E1 lhs;
 		E2 rhs;
+		OP op;
 	};
 }
 #endif
