@@ -7,18 +7,30 @@ namespace shogun
 
 	struct VectorAdd
 	{
+	public:
+		VectorAdd(double alpha, double beta): alpha(alpha), beta(beta) 
+		{
+		}
+
+		VectorAdd(const VectorAdd& other): alpha(other.alpha), beta(other.beta)
+		{
+		}
+
 		template <typename T>
 		SGVector<T> apply(const SGVector<T>& a, const SGVector<T>& b) const
 		{
-			return linalg::add(a, b);
+			return linalg::add(a, b, static_cast<T>(alpha), static_cast<T>(beta));
 		}
+	private:
+		double alpha;
+		double beta;
 	};
 
 	template <typename E1, typename E2>
-	auto add(const VectorExp<E1>& e1, const VectorExp<E2>& e2)
+	auto add(const VectorExp<E1>& e1, const VectorExp<E2>& e2, double alpha=1.0, double beta=1.0)
 	{
 		return BinaryVectorExp<VectorAdd, E1, E2>(
-		    VectorAdd(), e1.self(), e2.self());
+		    VectorAdd(alpha, beta), e1.self(), e2.self());
 	}
 
 	struct Dot

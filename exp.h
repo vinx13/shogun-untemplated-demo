@@ -89,7 +89,7 @@ namespace shogun
 	{
 	public:
 		BinaryVectorExp(OP op, const E1& lhs, const E2& rhs)
-		    : lhs(lhs), rhs(rhs)
+		    : op(op), lhs(lhs), rhs(rhs)
 		{
 		}
 
@@ -163,7 +163,7 @@ namespace shogun
 	{
 	public:
 		BinaryScalarExp(OP op, const E1& lhs, const E2& rhs)
-		    : lhs(lhs), rhs(rhs)
+		    : op(op), lhs(lhs), rhs(rhs)
 		{
 		}
 
