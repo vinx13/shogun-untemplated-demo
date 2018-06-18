@@ -1,5 +1,9 @@
 #include "Vector.h"
 #include "exp.h"
+#include "matrix_expression.h"
+#include "scalar_expression.h"
+#include "vector_expression.h"
+
 #include <shogun/mathematics/linalg/LinalgNamespace.h>
 
 namespace shogun
