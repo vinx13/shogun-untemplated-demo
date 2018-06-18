@@ -17,18 +17,13 @@ namespace shogun
 	template <typename E>
 	class VectorExp;
 
-	class Vector : SGReferencedData
+	class Vector : public SGReferencedData
 	{
-	private:
-		uint32_t m_vlen;
-		EPrimitiveType m_ptype;
-		void* m_data;
-
 	public:
 		template <class T>
 		using templated_type = SGVector<T>;
 
-		explicit Vector(int len, EPrimitiveType ptype = PT_FLOAT64)
+		explicit Vector(uint32_t len, EPrimitiveType ptype = PT_FLOAT64)
 		    : SGReferencedData(true), m_ptype(ptype), m_vlen(len)
 		{
 			SG_TYPE_SWITCH(ptype, PType, { m_data = SG_CALLOC(PType, len); })
@@ -58,25 +53,20 @@ namespace shogun
 
 		Vector& operator=(const Vector& other)
 		{
-			if (&other == this)
-				return *this;
-
-			unref();
-			copy_data(other);
-			copy_refcount(other);
-			ref();
+			SGReferencedData::operator=(other);
 			return *this;
 		}
 
 		Vector(Vector&& orig) : SGReferencedData(orig)
 		{
 			copy_data(orig);
+			orig.init_data();
 		}
 
 		Vector& operator=(Vector&& vector)
 		{
 			SGReferencedData::operator=(vector);
-			copy_data(vector);
+			return *this;
 		}
 
 		// TODO copy and assign from vector exp rvalue
@@ -131,6 +121,11 @@ namespace shogun
 		}
 
 		operator VectorRefExp();
+
+	private:
+		uint32_t m_vlen;
+		EPrimitiveType m_ptype;
+		void* m_data;
 	};
 }
 #endif // VECTOR_H_

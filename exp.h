@@ -53,7 +53,7 @@ namespace shogun
 	}
 
 	template <typename E>
-	Vector::Vector(const VectorExp<E>& exp)
+	Vector::Vector(const VectorExp<E>& exp) : m_data(nullptr)
 	{
 		*this = exp.self().eval();
 	}
