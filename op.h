@@ -16,10 +16,6 @@ namespace shogun
 		{
 		}
 
-		VectorAdd(const VectorAdd& other): alpha(other.alpha), beta(other.beta)
-		{
-		}
-
 		template <typename T>
 		SGVector<T> apply(const SGVector<T>& a, const SGVector<T>& b) const
 		{
