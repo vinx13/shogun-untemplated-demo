@@ -1,5 +1,5 @@
 #include "Vector.h"
-#include "exp.h"
+#include "vector_expression.h"
 
 namespace shogun
 {

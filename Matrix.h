@@ -96,3 +96,5 @@ namespace shogun
 		void* m_data;
 	};
 }
+
+#endif

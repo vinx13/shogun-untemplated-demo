@@ -2,6 +2,7 @@
 #define _MATRIX_EXPRESSION_H
 
 #include "exp.h"
+#include "Matrix.h"
 #include <shogun/lib/DataType.h>
 #include <shogun/lib/SGVector.h>
 
