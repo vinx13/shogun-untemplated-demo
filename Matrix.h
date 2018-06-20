@@ -39,6 +39,11 @@ namespace shogun
 			orig.init_data();
 		}
 
+		~Matrix::Matrix()
+		{
+			unref();
+		}
+
 		Matrix& operator=(const Matrix& other)
 		{
 			SGReferencedData::operator=(other);
