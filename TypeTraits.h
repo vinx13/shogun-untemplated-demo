@@ -1,3 +1,6 @@
+#ifndef _SG_TYPE_TRAITS_H
+#define _SG_TYPE_TRAITS_H
+
 #include <shogun/lib/DataType.h>
 
 namespace shogun
@@ -96,3 +99,5 @@ namespace shogun
 		static const auto PRIMITIVE_TYPE = PT_SGOBJECT;
 	};
 }
+
+#endif
