@@ -47,4 +47,27 @@ namespace shogun
 	{
 		return BinaryScalarExp<Dot, E1, E2>(Dot(), e1.self(), e2.self());
 	}
+
+	// a example of multiple output that looks bad
+	template <typename E1>
+	void eigen_solver(
+	    const MatrixExp<E1>& matrix, Vector& eigenvalues, Matrix& eigenmatrix)
+	{
+		// SG_TYPE_SWITCH(matrix.ptype(), PType, {
+		// can't use SG_TYPE_SWITCH, because it switches over all types while
+		// eigen_solver<bool> is undefined
+		switch (matrix.ptype())
+		{
+		case PT_FLOAT64:
+			typedef float64_t PType;
+			SGVector<PType> eigenvalues_ = eigenvalues;
+			SGMatrix<PType> eigenmatrix_ = eigenmatrix;
+			linalg::eigen_solver(
+			    matrix.self().template eval<PType>(), eigenvalues_,
+			    eigenmatrix_);
+			eigenvalues = eigenvalues_;
+			eigenmatrix = eigenmatrix_;
+			// TODO: other cases
+		}
+	}
 }

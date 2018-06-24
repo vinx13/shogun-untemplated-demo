@@ -6,6 +6,14 @@
 
 using namespace shogun;
 
+void eigen_demo()
+{
+	Matrix m(3, 3);
+	Vector eigenvalues(3);
+	Matrix eigenmatrix(3, 3);
+	eigen_solver(MatrixRefExp(m), eigenvalues, eigenmatrix);
+}
+
 int main()
 {
 	init_shogun_with_defaults();
@@ -32,6 +40,8 @@ int main()
 	ab.eval().display_vector("a+b");
 	float64_t dot_result = dot(ab, VectorRefExp(abc));
 	std::cout << "ab dot abc = " << dot_result << std::endl;
+
+	eigen_demo();
 
 	exit_shogun();
 	return 0;
