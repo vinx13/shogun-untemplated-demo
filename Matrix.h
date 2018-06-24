@@ -14,8 +14,16 @@ namespace shogun
 	class Matrix: public SGReferencedData
 	{
 	public:
-		explicit Vector(uint32_t num_rows, uint32_t num_cols, EPrimitiveType ptype = PT_FLOAT64)
-			: SGReferencedData(true), m_ptype(ptype), m_num_rows(num_rows), m_num_cols(num_cols)
+		Matrix() : SGReferencedData()
+		{
+			init_data();
+		}
+
+		explicit Matrix(
+		    uint32_t num_rows, uint32_t num_cols,
+		    EPrimitiveType ptype = PT_FLOAT64)
+		    : SGReferencedData(true), m_ptype(ptype), m_num_rows(num_rows),
+		      m_num_cols(num_cols)
 		{
 			SG_TYPE_SWITCH(ptype, PType, { m_data = SG_CALLOC(PType, num_rows*num_cols); })
 		}
@@ -39,7 +47,7 @@ namespace shogun
 			orig.init_data();
 		}
 
-		~Matrix::Matrix()
+		~Matrix()
 		{
 			unref();
 		}
@@ -99,6 +107,7 @@ namespace shogun
 		uint32_t m_num_rows;
 		uint32_t m_num_cols;
 		void* m_data;
+		EPrimitiveType m_ptype;
 	};
 }
 

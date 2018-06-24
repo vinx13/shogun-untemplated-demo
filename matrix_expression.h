@@ -30,6 +30,7 @@ namespace shogun
 
 	class MatrixRefExp : public MatrixExp<MatrixRefExp>
 	{
+	public:
 		MatrixRefExp(const Matrix& matrix) : matrix(matrix)
 		{
 		}

@@ -23,6 +23,11 @@ namespace shogun
 		template <class T>
 		using templated_type = SGVector<T>;
 
+		Vector() : SGReferencedData()
+		{
+			init_data();
+		}
+
 		explicit Vector(uint32_t len, EPrimitiveType ptype = PT_FLOAT64)
 		    : SGReferencedData(true), m_ptype(ptype), m_vlen(len)
 		{
