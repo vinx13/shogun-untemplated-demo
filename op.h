@@ -11,7 +11,7 @@ namespace shogun
 	template <typename T>
 	auto forward_exp(T e)
 	{
-		return e;
+		return std::forward(e);
 	}
 
 	auto forward_exp(Vector& e)
