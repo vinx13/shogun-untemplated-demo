@@ -30,7 +30,7 @@ int main()
 
 	// BinaryVectorExp<VectorAdd, VectorRefExp, VectorRefExp>
 	// auto ab = add(a,b);
-	auto ab = add(VectorRefExp(a), VectorRefExp(b));
+	auto ab = add(a, b);
 
 	// BinaryVectorExp<VectorAdd, BinaryVectorExp<VectorAdd, VectorRefExp,
 	// VectorRefExp>, VectorRefExp>

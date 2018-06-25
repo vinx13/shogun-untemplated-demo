@@ -8,7 +8,24 @@
 
 namespace shogun
 {
+	template <typename T>
+	auto forward_exp(T e)
+	{
+		return e;
+	}
 
+	auto forward_exp(Vector& e)
+	{
+		return VectorRefExp(e);
+	}
+
+	auto forward_exp(const Vector& e)
+	{
+		return VectorRefExp(e);
+	}
+
+	// Vector Add: an example showing passing Vector without explicitly casting
+	// to VectorRefExp
 	struct VectorAdd
 	{
 	public:
@@ -27,10 +44,18 @@ namespace shogun
 	};
 
 	template <typename E1, typename E2>
-	auto add(const VectorExp<E1>& e1, const VectorExp<E2>& e2, double alpha=1.0, double beta=1.0)
+	auto add_impl(
+	    const VectorExp<E1>& e1, const VectorExp<E2>& e2, double alpha = 1.0,
+	    double beta = 1.0)
 	{
 		return BinaryVectorExp<VectorAdd, E1, E2>(
 		    VectorAdd(alpha, beta), e1.self(), e2.self());
+	}
+
+	template <typename... Args>
+	auto add(Args... args) -> decltype(add_impl(forward_exp(args)...))
+	{
+		return add_impl(forward_exp(args)...);
 	}
 
 	struct Dot
