@@ -33,7 +33,7 @@ int main()
 
 	// BinaryVectorExp<VectorAdd, BinaryVectorExp<VectorAdd, VectorRefExp,
 	// VectorRefExp>, VectorRefExp>
-	Vector abc = add(ab, VectorRefExp(c)); // implicit evaluation
+	Vector abc = add(ab, c); // implicit evaluation
 	abc.display_vector("a+b+c");
 
 	ab.eval().display_vector("a+b");
