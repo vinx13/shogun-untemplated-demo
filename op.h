@@ -9,9 +9,9 @@
 namespace shogun
 {
 	template <typename T>
-	auto forward_exp(T e)
+	auto forward_exp(T&& e)
 	{
-		return std::forward(e);
+		return std::forward<T>(e);
 	}
 
 	auto forward_exp(Vector& e)
@@ -36,8 +36,19 @@ namespace shogun
 		template <typename T>
 		SGVector<T> apply(const SGVector<T>& a, const SGVector<T>& b) const
 		{
-			return linalg::add(a, b, static_cast<T>(alpha), static_cast<T>(beta));
+			return linalg::add(
+			    a, b, static_cast<T>(alpha),
+			    static_cast<T>(beta)); // should we have T alpha, beta so that
+			                           // we can avoid casting here?
 		}
+		template <typename T>
+		void apply(
+		    const SGVector<T>& a, const SGVector<T>& b, SGVector<T>& dst) const
+		{
+			return linalg::add(
+			    a, b, dst, static_cast<T>(alpha), static_cast<T>(beta));
+		}
+
 	private:
 		double alpha;
 		double beta;
@@ -53,7 +64,7 @@ namespace shogun
 	}
 
 	template <typename... Args>
-	auto add(Args... args) -> decltype(add_impl(forward_exp(args)...))
+	auto add(Args&&... args) -> decltype(add_impl(forward_exp(args)...))
 	{
 		return add_impl(forward_exp(args)...);
 	}
