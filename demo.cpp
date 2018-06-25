@@ -29,8 +29,7 @@ int main()
 	c.display_vector("c");
 
 	// BinaryVectorExp<VectorAdd, VectorRefExp, VectorRefExp>
-	// auto ab = add(a,b);
-	auto ab = add(a, b);
+	auto ab = add(a, b); // don't need to cast Vector to VectorRefExp, see op.h add, add_impl
 
 	// BinaryVectorExp<VectorAdd, BinaryVectorExp<VectorAdd, VectorRefExp,
 	// VectorRefExp>, VectorRefExp>
