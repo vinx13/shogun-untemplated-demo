@@ -64,7 +64,7 @@ namespace shogun
 	}
 
 	template <typename... Args>
-	auto add(Args&&... args) -> decltype(add_impl(forward_exp(args)...))
+	auto add(Args&&... args)
 	{
 		return add_impl(forward_exp(args)...);
 	}
